@@ -1,5 +1,16 @@
-import { tweetsData } from './data.js'
+import { data } from './data.js'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
+let tweetsFromLocalStorage = JSON.parse( localStorage.getItem('tweets') )
+let tweetsData = []
+if(tweetsFromLocalStorage)
+{
+    tweetsData = tweetsFromLocalStorage
+}
+else{
+    tweetsData = data
+}
+
 
 
 document.addEventListener('click', function(e){
@@ -23,6 +34,9 @@ function handlePostDeleteClick(tweetId){
     
     const index = tweetsData.findIndex((tweet) => tweet.uuid === tweetId)
     tweetsData.splice(index, 1)
+
+    localStorage.setItem('tweets', JSON.stringify(tweetsData))
+    
     render()
 }
 
@@ -36,8 +50,13 @@ function handlePostReplyClick(tweetId)
             profilePic: `images/scrimbalogo.png`,
             tweetText: inputText,
         })
+
+        localStorage.setItem('tweets', JSON.stringify(tweetsData))
+
         render()
         handleReplyClick(tweetId)
+
+
     }
 }
 
@@ -58,6 +77,7 @@ function handleTweetBtnClick(){
         }
 
         tweetsData.unshift(newTweet)
+        localStorage.setItem('tweets', JSON.stringify(tweetsData))
 
         inputText.value = ""
         render()
@@ -77,6 +97,8 @@ function handleRetweetClick(tweetId){
         tweetObj.retweets++
     tweetObj.isRetweeted = !tweetObj.isRetweeted
 
+    localStorage.setItem('tweets', JSON.stringify(tweetsData))
+
     
     render()
 }
@@ -89,6 +111,8 @@ function handleLikeClick(tweetId){
         tweetObj.likes++
 
     tweetObj.isLiked = !tweetObj.isLiked
+
+    localStorage.setItem('tweets', JSON.stringify(tweetsData))
 
     
 
