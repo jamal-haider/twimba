@@ -71,6 +71,8 @@ button{
     font-weight: 600;
 }
 
+
+
 /* tweet */
 
 .tweet{
@@ -104,6 +106,34 @@ button{
     margin: 10px 0 10px 40px;
     width: 80%;
 }
+
+.add-tweet-reply{
+    border-top: 1px solid lightgray;
+    padding: 20px 0 0 0px;
+    margin: 10px 0 10px 40px;
+    width: 80%;
+    display: fex;
+}
+.add-tweet-reply input{
+    width: 75%;
+    border: 0;
+    border-bottom: #f3f3f3 1px solid;
+    padding: 7px;
+}
+
+.reply-btn{
+    width: 22%;
+    font-size: 10pt;
+    padding: 5px 10px;
+    border-radius: 2px;
+    background: gray;
+    font-weight: 200;
+    
+}
+
+
+
+
 
 .handle{
     font-size: 12px;

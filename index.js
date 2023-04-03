@@ -1,4 +1,5 @@
 import { tweetsData } from './data.js'
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
 document.addEventListener('click', function(e){
 
@@ -8,9 +9,51 @@ document.addEventListener('click', function(e){
         handleLikeClick(e.target.dataset.like)
     else if(e.target.dataset.retweet)
         handleRetweetClick(e.target.dataset.retweet)
-    
+    else if(e.target.id == 'tweet-btn')
+        handleTweetBtnClick()
+    else if(e.target.dataset.postReply)
+        handlePostReplyClick(e.target.dataset.postReply)
 
 })
+
+
+function handlePostReplyClick(tweetId)
+{
+    const inputText = document.getElementById('post-reply-' + tweetId).value
+    if(inputText){
+        let tweetObj = findTweetByID(tweetId)
+        tweetObj.replies.push({
+            
+            handle: `@Scrimba`,
+            profilePic: `images/scrimbalogo.png`,
+            tweetText: inputText,
+        })
+        render()
+        handleReplyClick(tweetId)
+    }
+}
+
+function handleTweetBtnClick(){
+    const inputText = document.getElementById('tweet-input').value
+
+    if(inputText){
+        const newTweet =  {
+            handle: `@Scrimba`,
+            profilePic: `images/scrimbalogo.png`,
+            likes: 0,
+            retweets: 0,
+            tweetText: inputText,
+            replies: [],
+            isLiked: false,
+            isRetweeted: false,
+            uuid: uuidv4(),
+        }
+
+        tweetsData.unshift(newTweet)
+
+        render()
+    }
+}
 
 
 function handleReplyClick(tweetId){
@@ -41,8 +84,6 @@ function handleLikeClick(tweetId){
 
 
 function getFeedHTML(){
-
-    
 
     let feedHtml = ''
     tweetsData.forEach((tweet) => {
@@ -91,7 +132,12 @@ function getFeedHTML(){
             </div>
             <div class="hidden" id="replies-${tweet.uuid}">
                 ${repliesHtml}
+                <div class="add-tweet-reply">
+                    <input type="text" placeholder="Type here..." id="post-reply-${tweet.uuid}">
+                    <button class="reply-btn" id="reply-btn" data-post-reply="${tweet.uuid}">Reply</button>
+                </div>
             </div>
+
             `
     })
 
