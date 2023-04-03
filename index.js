@@ -1,8 +1,8 @@
 import { tweetsData } from './data.js'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
-document.addEventListener('click', function(e){
 
+document.addEventListener('click', function(e){
     if(e.target.dataset.reply)
         handleReplyClick(e.target.dataset.reply)
     else if(e.target.dataset.like)
@@ -13,9 +13,18 @@ document.addEventListener('click', function(e){
         handleTweetBtnClick()
     else if(e.target.dataset.postReply)
         handlePostReplyClick(e.target.dataset.postReply)
+    else if(e.target.dataset.postDelete)
+        handlePostDeleteClick(e.target.dataset.postDelete)
 
 })
 
+
+function handlePostDeleteClick(tweetId){
+    
+    const index = tweetsData.findIndex((tweet) => tweet.uuid === tweetId)
+    tweetsData.splice(index, 1)
+    render()
+}
 
 function handlePostReplyClick(tweetId)
 {
@@ -23,7 +32,6 @@ function handlePostReplyClick(tweetId)
     if(inputText){
         let tweetObj = findTweetByID(tweetId)
         tweetObj.replies.push({
-            
             handle: `@Scrimba`,
             profilePic: `images/scrimbalogo.png`,
             tweetText: inputText,
@@ -34,15 +42,15 @@ function handlePostReplyClick(tweetId)
 }
 
 function handleTweetBtnClick(){
-    const inputText = document.getElementById('tweet-input').value
+    const inputText = document.getElementById('tweet-input')
 
-    if(inputText){
+    if(inputText.value){
         const newTweet =  {
             handle: `@Scrimba`,
             profilePic: `images/scrimbalogo.png`,
             likes: 0,
             retweets: 0,
-            tweetText: inputText,
+            tweetText: inputText.value,
             replies: [],
             isLiked: false,
             isRetweeted: false,
@@ -51,6 +59,7 @@ function handleTweetBtnClick(){
 
         tweetsData.unshift(newTweet)
 
+        inputText.value = ""
         render()
     }
 }
@@ -67,6 +76,8 @@ function handleRetweetClick(tweetId){
     else
         tweetObj.retweets++
     tweetObj.isRetweeted = !tweetObj.isRetweeted
+
+    
     render()
 }
 
@@ -79,12 +90,15 @@ function handleLikeClick(tweetId){
 
     tweetObj.isLiked = !tweetObj.isLiked
 
+    
+
     render()
 }
 
 
 function getFeedHTML(){
 
+    
     let feedHtml = ''
     tweetsData.forEach((tweet) => {
         const likeIconClass = tweet.isLiked ? 'liked' : ''
@@ -126,6 +140,9 @@ function getFeedHTML(){
                                 <i class="fa-solid fa-retweet ${retweetIconClass}" data-retweet=${tweet.uuid}></i>
                                 ${tweet.retweets}
                             </span>
+                            <span class="tweet-detail">
+                                <i class="fa-solid fa-trash" data-post-delete=${tweet.uuid}></i>
+                            </span>
                         </div>   
                     </div>            
                 </div>
@@ -148,9 +165,10 @@ function render(){
     document.getElementById('feed').innerHTML = getFeedHTML()
 }
 
-render()
-
 
 function findTweetByID(id){
     return tweetsData.find(tweet => tweet.uuid === id)
 }
+
+
+render()
