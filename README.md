@@ -1,9 +1,13 @@
 ## About Twimba
 
-At twimba, users can create new post and reply, like and reteet others post, all the data saved in the local storage.
+At twimba allows it's users to do the following operations:
 
-- HTML
-- CSS
-- JavaScript
+- View all tweets
+- Add New tweet
+- Like, Comment, Retweet
+- Delete tweet
 
-Happy Coding!
+The app is designed in HTML, CSS and Javascript and the data is stored to the local storage.
+
+
+
